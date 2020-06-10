@@ -274,28 +274,73 @@ void loop() {
 }
 
 
+// WARNING!! The off-time delay is necessary to make sure
+// that the H-Bridge are not shorted during switching.
+// LOWER THIS VALUE AT YOUR OWN RISK!! 
+// THE WORST MIGHT HAPPEN (BURNING THE MOS)!!
+#define OFF_DELAY_HV_MODE_MS 20
+
 // Function used to drive the Full Bridge motor
 static void motorFBwrite()
 {
+	static int timestamp = 0;						 
 #ifdef MOTOR_FB_EN
+  #if (MOTOR_SHIELD_MODE == HV_MODE)
+    // A delay is necessary in order to prevent short-circuiting
+    // Half of the bridge
+    if(millis()-timestamp > OFF_DELAY_HV_MODE_MS)
+    {
+        timestamp = millis();  
+    }
+    else
+    {
+        return;  
+    } 
+  #endif
+  if(motorFB_value == 0)
+  {
     digitalWrite(PIN_FBM_A_H, LOW);
     digitalWrite(PIN_FBM_B_H, LOW);
     analogWrite(PIN_FBM_A_L, 0);
     analogWrite(PIN_FBM_B_L, 0);
-  if(motorFB_value == 0)
-  {
+						
+   
     return;
   }
   // We keep the pMOSs always on and apply pwm on the nMOSs side
   if(motorFB_value > 0) // forward
   {
-    digitalWrite(PIN_FBM_B_H, HIGH);
-    analogWrite(PIN_FBM_A_L, motorFB_value);
+    // First make sure that the other side is off by reading the pin
+    if(digitalRead(PIN_FBM_A_H) == LOW)
+    {
+        digitalWrite(PIN_FBM_B_H, HIGH);
+        analogWrite(PIN_FBM_A_L, motorFB_value);
+    }
+    else
+    {
+        // Probably didn't passed throught he dead zone..we need to go there first
+        digitalWrite(PIN_FBM_A_H, LOW);
+        digitalWrite(PIN_FBM_B_H, LOW);
+        analogWrite(PIN_FBM_A_L, 0);
+        analogWrite(PIN_FBM_B_L, 0);
+    }
   }
   else // reverse
   {
-    digitalWrite(PIN_FBM_A_H, HIGH);
-    analogWrite(PIN_FBM_B_L, -motorFB_value);
+    // First make sure that the other side is off by reading the pin
+    if(digitalRead(PIN_FBM_B_H) == LOW)
+    {
+        digitalWrite(PIN_FBM_A_H, HIGH);
+        analogWrite(PIN_FBM_B_L, -motorFB_value);
+    }
+    else
+    {
+        // Probably didn't passed throught he dead zone..we need to go there first
+        digitalWrite(PIN_FBM_A_H, LOW);
+        digitalWrite(PIN_FBM_B_H, LOW);
+        analogWrite(PIN_FBM_A_L, 0);
+        analogWrite(PIN_FBM_B_L, 0);
+    }
   }
 #endif
 }
