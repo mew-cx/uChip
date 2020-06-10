@@ -1,5 +1,5 @@
 /*
- * uChip Power management library.
+ * Itaca Expansion Shields library.
  * Copyright (c) 2019 Itaca Innovation.
  *
  * This library is free software; you can redistribute it and/or
@@ -17,15 +17,25 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-
-#ifndef _ITACA_EXPANSION_SHIELDS_H_INCLUDED
-#define _ITACA_EXPANSION_SHIELDS_H_INCLUDED
-
+#include "ItacaExpansionShields.h"
 #include <Arduino.h>
-
-#define ITACA_HV_MODE 0
-#define ITACA_LV_MODE 1
-#define ITACA_BYPASS_DE 0
-#define ITACA_BYPASS_EN 1
-void itacaMotorShieldSetBypass(uint8_t enable);
+#include <sam.h>
+#ifndef ITACA_MOTOR_SHIELD_BYPASS_PIN
+  #define ITACA_MOTOR_SHIELD_BYPASS_PIN 18
 #endif
+
+/*
+*   itacaMotorShieldEnableBypass: enables or disables the PMOS bypass in the Itaca Motor Shield board.
+*   Params:  
+*    enable = ITACA_BYPASS_DE:  Bypass disabled.
+*    enable = ITACA_BYPASS_EN:  Bypass enabled.
+*/
+void itacaMotorShieldSetBypass(uint8_t enable)
+{
+  if (enable == ITACA_BYPASS_EN)
+     REG_PORT_OUTSET0 = (1 << ITACA_MOTOR_SHIELD_BYPASS_PIN);
+  else
+     REG_PORT_OUTCLR0 = (1 << ITACA_MOTOR_SHIELD_BYPASS_PIN);
+     // and configure pin as output
+  REG_PORT_DIRSET0 = (1 << ITACA_MOTOR_SHIELD_BYPASS_PIN);
+}

@@ -11,11 +11,12 @@
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-
-#none!
+itacaMotorShieldSetBypass	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)
 #######################################
-
-#none!
+ITACA_HV_MODE	LITERAL1
+ITACA_LV_MODE	LITERAL1
+ITACA_BYPASS_EN	LITERAL1
+ITACA_BYPASS_DE	LITERAL1

@@ -1,21 +1,14 @@
+#include <ItacaExpansionShields.h>
 #include <uChipPowerManagement.h>
 #include <Servo.h>
 
 // Program defines
 
-// uChip related defines for the motor shield
-enum {
-  HV_MODE,
-  LV_MODE
-} motor_shield_mode_t;
-
 // Comment/uncomment the right define accordingly to the mode you soldered your motor shield board
 //////////////////////////////////
-#define MOTOR_SHIELD_MODE HV_MODE
-//#define MOTOR_SHIELD_MODE LV_MODE
+#define MOTOR_SHIELD_MODE ITACA_HV_MODE
+//#define MOTOR_SHIELD_MODE ITACA_LV_MODE
 //////////////////////////////////
-
-#define PMOS_BYPASS_PIN uC7
 
 
 // R614X 2.4GHz radio defines
@@ -323,12 +316,10 @@ static void set_uChip(void)
 {
   // Setting uChip default configuration
   // Turn on bypass pMos, this feature is not necessary in case you have a simple diode
-  digitalWrite(PMOS_BYPASS_PIN, LOW);
-  pinMode(PMOS_BYPASS_PIN, OUTPUT);
-#if (MOTOR_SHIELD_MODE == HV_MODE)
-  digitalWrite(PMOS_BYPASS_PIN, LOW);
+#if (MOTOR_SHIELD_MODE == ITACA_HV_MODE)
+  itacaMotorShieldSetBypass(ITACA_BYPASS_DE);
 #else
-  digitalWrite(PMOS_BYPASS_PIN, HIGH);
+  itacaMotorShieldSetBypass(ITACA_BYPASS_EN);
 #endif
   // Disabling the boost since the variable was initialized so.
   uChipEnableBoost(UCHIP_BOOST_DISABLED);
