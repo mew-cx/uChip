@@ -22,10 +22,62 @@
 #define _ITACA_EXPANSION_SHIELDS_H_INCLUDED
 
 #include <Arduino.h>
-
-#define ITACA_HV_MODE 0
-#define ITACA_LV_MODE 1
-#define ITACA_BYPASS_DE 0
-#define ITACA_BYPASS_EN 1
+//////////////////////////////////////////////////
+// Motor defines and functions
+enum 
+{
+ITACA_HV_MODE,
+ITACA_LV_MODE
+}
+itaca_voltage_mode_t;
+enum
+{
+ITACA_BYPASS_DE,
+ITACA_BYPASS_EN
+}
+itaca_bypass_mode_t;
 void itacaMotorShieldSetBypass(uint8_t enable);
+//////////////////////////////////////////////////
+// Relay shield defines and functions
+enum 
+{
+ITACA_RELAY_CH_A = 1,
+ITACA_RELAY_CH_B = 2,
+ITACA_RELAY_CH_C = 3,
+ITACA_RELAY_CH_D = 4,
+ITACA_RELAY_CH_E = 5,
+ITACA_RELAY_CH_F = 6,
+ITACA_RELAY_CH_G = 7,
+ITACA_RELAY_CH_H = 15,
+ITACA_RELAY_CH_I = 12,
+ITACA_RELAY_CH_J = 11,
+ITACA_RELAY_CH_K = 10,
+ITACA_RELAY_CH_L = 9
+}
+itaca_relay_ch_pinout_t;
+enum 
+{
+ITACA_RELAY_SW_P1 = 13,
+ITACA_RELAY_SW_P2 = 14
+}
+itaca_relay_sw_pinout_t;
+enum 
+{
+ITACA_RELAY_STATUS_DE,
+ITACA_RELAY_STATUS_EN
+}
+itaca_relay_ch_status_t;
+enum 
+{
+ITACA_RELAY_SW_RELEASED,
+ITACA_RELAY_SW_PRESSED
+}
+itaca_relay_sw_status_t;
+void itacaRelayShieldInit(void);
+void itacaRelayShieldResetAll(void);
+void itacaRelayShieldSetAll(void);
+void itacaRelayShieldSetCh(uint8_t ch, uint8_t status);
+uint8_t itacaRelayShieldGetCh(uint8_t ch);
+uint8_t itacaRelayShieldGetSw(uint8_t sw);
+//////////////////////////////////////////////////
 #endif

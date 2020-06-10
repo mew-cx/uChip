@@ -1,12 +1,13 @@
 /*
-  Sketch for uChip showing the features which can be controlled using the Motor Shield Expansion Board
+  Sketch for uChip showing the differential thrust on motors M1 and M2.
 
-  Demonstrates the use of the Motor Shield Expansion Board library for uChip.
+  Demonstrates the use of the Motor Shield Expansion Board library for uChip to create a differential thrust.
   The Motor Shield can be powered externally either at stadard VEXT voltage (3.3V - 5V)
   or Higher Voltage (up to 12V). Read carefully the manual and schematics before connecting power!
 
   Read the following code in details to find out how to set your Motor Shield board.
-
+  Example based on MotorServoDriverControl.ino sketch.
+  
   This example code is in the public domain, more details can be found on the online guide at
 
   https://shop.itaca-innovation.com
@@ -52,17 +53,8 @@
 // DEBUG: To print out values uncomment
 //#define DEBUG
 //#define EMULATE_RX
-#define SERVO_1_EN
-#define SERVO_2_EN
-#define SERVO_3_EN
 #define MOTOR_1_EN
 #define MOTOR_2_EN
-#define MOTOR_FB_EN
-
-
-
-
-
 
 
 #ifdef DEBUG
@@ -131,9 +123,6 @@ static uint16_t ch[NUM_CH];                 // Array containing the channels val
 int mapValue(int ch_value, int min_range, int max_range, int max_value, int min_value);
 int fitChToValue(uint16_t ch_value, uint16_t min_range, uint16_t max_range, uint16_t max_value, uint16_t min_value);
 
-// This variable saves the value we relate to the gas or throttle
-int throttle_value = 0;
-
 
 void setup() {
   // Run the setting routine
@@ -183,6 +172,12 @@ void setup() {
 #endif
 }
 
+
+// These variables save the value used to compute differential trust
+int throttle_value, tilt_value;
+int valueL, valueR;
+
+
 void loop() {
 #ifdef EMULATE_RX
   // Run continuosly if we are using the emulator
@@ -215,47 +210,33 @@ void loop() {
 //       INSERT HERE THE CODE TO HANDLE CHANNELS!!                    //
 //       In ch[i] you will find the channels values (EMULATED or REAL)//
 ////////////////////////////////////////////////////////////////////////  
-
-    // Translate each channel value into the desired output value
-    // Servo values
-#ifdef SERVO_1_EN
-    // Ch 0 sets the servo direction, with direct connection. In my case I also need to reverse the direction of the servo
-    servo1_value = fitChToValue(ch[0], MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_SERVO_VALUE, MIN_SERVO_VALUE);
-#endif
-#ifdef SERVO_2_EN
-    // Ch 4 sets the servo direction, with direct connection. In my case I also need to reverse the direction of the servo
-    servo2_value = fitChToValue(ch[4], MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_SERVO_VALUE, MIN_SERVO_VALUE);
-#endif
-#ifdef SERVO_3_EN
-    // Ch 5 sets the servo direction, with direct connection. In my case I also need to reverse the direction of the servo
-    servo3_value = fitChToValue(ch[5], MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_SERVO_VALUE, MIN_SERVO_VALUE);
-#endif
-#ifdef MOTOR_1_EN
-    // Ch 3 sets the motor power.
-    motor1_value = fitChToValue(ch[3], MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE);
-#endif
-#ifdef MOTOR_2_EN
-    // Ch 1 sets the motor power.
-    motor2_value = fitChToValue(ch[1], MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE);
-#endif
-
-    // Ch[2] sets the motorFB direction and power.
-    throttle_value = (int) ch[2];
-#ifdef MOTOR_FB_EN    
-    if((throttle_value >= MID_RANGE - HEADROOM) &&  (throttle_value <= MID_RANGE + HEADROOM)) // then left everything off
-      motorFB_value = 0;
-    else
+    
+    // Motors value are calculated mixing the two channels signals, throttle and tilt (ch[2] & ch[0])
+    throttle_value = ch[2];
+    tilt_value = ch[0];
+    // The stick is in idle position, only throttle affects the motors values
+    if((tilt_value >= MID_RANGE - HEADROOM) && (tilt_value <= MID_RANGE + HEADROOM)) 
     {
-      if(throttle_value > MID_RANGE + HEADROOM)
+      motor1_value = fitChToValue(throttle_value, MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE);
+      motor2_value = motor1_value; // It is stupid to do the math twice! :)
+    }
+    else // there are two cases, we are turning left (tilt < MID_RANGE) or right (tilt > MID_RANGE)
+    {
+      if(tilt_value < (MID_RANGE - HEADROOM)) // turn left, thus give more thrust to the right motor and lower the left one
       {
-        motorFB_value = mapValue(throttle_value, MID_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE);
+          valueL = (MIN_RANGE + (tilt_value - (MIN_RANGE + HEADROOM))*(throttle_value - MIN_RANGE)/(MID_RANGE - HEADROOM - (MIN_RANGE + HEADROOM)));
+          valueR = throttle_value;
+          motor1_value = mapValue(valueL, MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE);
+          motor2_value = mapValue(valueR, MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE);
       }
-      else
-      { 
-        motorFB_value = mapValue(throttle_value, MIN_RANGE + HEADROOM, MID_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE) - MAX_MOTOR_VALUE;
+      else  // turn right, thus give more thrust to the left motor and lower the right one
+      {
+          valueL = throttle_value;
+          valueR =  (throttle_value + (tilt_value - (MID_RANGE + HEADROOM))*(MIN_RANGE - throttle_value)/(MAX_RANGE - HEADROOM - (MID_RANGE + HEADROOM)));
+          motor1_value = mapValue(valueL, MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE);
+          motor2_value = mapValue(valueR, MIN_RANGE + HEADROOM, MAX_RANGE - HEADROOM, MAX_MOTOR_VALUE, MIN_MOTOR_VALUE);
       }
     }
-#endif
 
 ////////////////////////////////////////////////////////////////////////   
 // INFO: END CUSTOM SECTION                                        //

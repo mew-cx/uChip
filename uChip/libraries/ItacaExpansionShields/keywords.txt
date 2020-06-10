@@ -1,22 +1,48 @@
 #######################################
-# Syntax Coloring Map uChipPowerManagement
+# Syntax Coloring Map ItacaExpansionShields
 #######################################
 
 #######################################
 # Datatypes (KEYWORD1)
 #######################################
-
-#none!
-
+itaca_voltage_mode_t	KEYWORD1
+itaca_bypass_mode_t		KEYWORD1
+itaca_relay_ch_pinout_t	KEYWORD1
+itaca_relay_sw_pinout_t	KEYWORD1
+itaca_relay_ch_status_t	KEYWORD1
+itaca_relay_sw_status_t	KEYWORD1
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 itacaMotorShieldSetBypass	KEYWORD2
-
+itacaRelayShieldInit		KEYWORD2
+itacaRelayShieldResetAll	KEYWORD2
+itacaRelayShieldSetAll		KEYWORD2
+itacaRelayShieldSetCh		KEYWORD2
+itacaRelayShieldGetCh		KEYWORD2
+itacaRelayShieldGetSw		KEYWORD2
 #######################################
 # Constants (LITERAL1)
 #######################################
-ITACA_HV_MODE	LITERAL1
-ITACA_LV_MODE	LITERAL1
-ITACA_BYPASS_EN	LITERAL1
-ITACA_BYPASS_DE	LITERAL1
+ITACA_HV_MODE		LITERAL1
+ITACA_LV_MODE		LITERAL1
+ITACA_BYPASS_EN		LITERAL1
+ITACA_BYPASS_DE		LITERAL1
+ITACA_RELAY_CH_A	LITERAL1
+ITACA_RELAY_CH_B	LITERAL1
+ITACA_RELAY_CH_C	LITERAL1
+ITACA_RELAY_CH_D	LITERAL1
+ITACA_RELAY_CH_E	LITERAL1
+ITACA_RELAY_CH_F	LITERAL1
+ITACA_RELAY_CH_G	LITERAL1
+ITACA_RELAY_CH_H	LITERAL1
+ITACA_RELAY_CH_I	LITERAL1
+ITACA_RELAY_CH_J	LITERAL1
+ITACA_RELAY_CH_K	LITERAL1
+ITACA_RELAY_CH_L	LITERAL1
+ITACA_RELAY_SW_P1	LITERAL1
+ITACA_RELAY_SW_P2	LITERAL1
+ITACA_RELAY_STATUS_DE	LITERAL1
+ITACA_RELAY_STATUS_EN	LITERAL1
+ITACA_RELAY_SW_RELEASED	LITERAL1
+ITACA_RELAY_SW_PRESSED	LITERAL1
