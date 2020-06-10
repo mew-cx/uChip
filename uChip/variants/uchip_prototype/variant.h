@@ -199,6 +199,11 @@ static const uint8_t SCL = PIN_WIRE_SCL;
 #define PIN_USB_DM          (36ul)
 #define PIN_USB_DP          (37ul)
 
+#define  PIN_SERIAL_USB_HW_TX 36
+#define  PIN_SERIAL_USB_HW_RX 37
+#define  PAD_SERIAL_USB_HW_TX UART_TX_PAD_2
+#define  PAD_SERIAL_USB_HW_RX SERCOM_RX_PAD_3
+
 /*
  * I2S Interfaces
  */
