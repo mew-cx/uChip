@@ -1,0 +1,31 @@
+#######################################
+# Syntax Coloring Map uChipPowerManagement
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+#none!
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+uChipEnableBoost	KEYWORD2
+uChipSetVextValue	KEYWORD2
+uChipSleep		KEYWORD2
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+SLEEP_IDLE0		LITERAL1
+SLEEP_IDLE1		LITERAL1
+SLEEP_IDLE2		LITERAL1
+SLEEP_DEEP		LITERAL1
+SLEEP_ON_EXIT		LITERAL1
+NO_SLEEP_ON_EXIT	LITERAL1
+VEXT_USB		LITERAL1
+VEXT_3V3		LITERAL1
+UCHIP_BOOST_DISABLED		LITERAL1
+UCHIP_BOOST_DISABLED		LITERAL1

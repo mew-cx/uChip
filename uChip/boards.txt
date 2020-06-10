@@ -1,0 +1,69 @@
+# Copyright (c) 2019 Itaca Innovation s.r.l.  All right reserved.
+#
+# This library is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# This library is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public
+# License along with this library; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+
+# uChip prototype (Native USB Port)
+# ---------------------------------------
+uchip_prototype_native.name=uChip prototype (Native USB Port)
+uchip_prototype_native.vid.0=0x04D8
+uchip_prototype_native.pid.0=0xED7D
+uchip_prototype_native.vid.1=0x16c0
+uchip_prototype_native.pid.1=0x05e1
+uchip_prototype_native.upload.tool=bossac
+uchip_prototype_native.upload.protocol=sam-ba
+uchip_prototype_native.upload.maximum_size=262144
+uchip_prototype_native.upload.use_1200bps_touch=true
+uchip_prototype_native.upload.wait_for_upload_port=true
+uchip_prototype_native.upload.native_usb=true
+uchip_prototype_native.build.mcu=cortex-m0plus
+uchip_prototype_native.build.f_cpu=48000000L
+uchip_prototype_native.build.usb_product="uChip"
+uchip_prototype_native.build.usb_manufacturer="Itaca Innovation (https://www.itaca-innovation.com/)"
+uchip_prototype_native.build.board=SAMD_ZERO
+uchip_prototype_native.build.core=arduino
+uchip_prototype_native.build.extra_flags=-D__SAMD21G18A__ {build.usb_flags}
+uchip_prototype_native.build.ldscript=linker_scripts/gcc/flash_with_bootloader.ld
+uchip_prototype_native.build.variant=uchip_prototype
+uchip_prototype_native.build.variant_system_lib=
+uchip_prototype_native.build.vid=0x04D8
+uchip_prototype_native.build.pid=0xED7D
+uchip_prototype_native.bootloader.file=uChipBootloader/uChip_samd21_sam_ba.bin
+
+# uChip (Native USB Port)
+# ---------------------------------------
+uchip_native.name=uChip (Native USB Port)
+uchip_native.vid.0=0x04D8
+uchip_native.pid.0=0xED7D
+uchip_native.vid.1=0x16C0
+uchip_native.pid.1=0x05e1
+uchip_native.upload.tool=bossac
+uchip_native.upload.protocol=sam-ba
+uchip_native.upload.maximum_size=262144
+uchip_native.upload.use_1200bps_touch=true
+uchip_native.upload.wait_for_upload_port=true
+uchip_native.upload.native_usb=true
+uchip_native.build.mcu=cortex-m0plus
+uchip_native.build.f_cpu=48000000L
+uchip_native.build.usb_product="uChip"
+uchip_native.build.usb_manufacturer="Itaca Innovation (https://www.itaca-innovation.com/)"
+uchip_native.build.board=SAMD_ZERO
+uchip_native.build.core=arduino
+uchip_native.build.extra_flags=-D__SAMD21G18A__ {build.usb_flags}
+uchip_native.build.ldscript=linker_scripts/gcc/flash_with_bootloader.ld
+uchip_native.build.variant=uchip
+uchip_native.build.variant_system_lib=
+uchip_native.build.vid=0x04D8
+uchip_native.build.pid=0xED7D
+uchip_native.bootloader.file=uChipBootloader/uChip_samd21_sam_ba.bin
