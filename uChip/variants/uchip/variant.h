@@ -122,7 +122,7 @@ static const uint8_t uCVEXT  = PIN_VEXT_SELECT;
 /*
  * Analog pins
  */
-#define PIN_A0               (23ul)
+#define PIN_A0               (17ul)
 #define PIN_A1               (17ul)
 #define PIN_A2               (18ul)
 #define PIN_A3               (19ul)
